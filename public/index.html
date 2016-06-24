@@ -1,0 +1,44 @@
+<canvas id="C"></canvas>
+<script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+<script>
+
+	const WIDTH = window.innerWidth * 2;
+	const LINE_WEIGHT = 0.5;
+	const DOT_COLOR = 'red';
+	const DOT_RADIUS = 2/3;
+
+	const canvas = document.getElementById('C');
+	const T = C.getContext('2d');
+
+	const draw = data => {
+
+		console.log('data', data);
+
+		const {nodes, edges, boundingBox} = data;
+		const mult = WIDTH / (boundingBox.max[0] - boundingBox.min[0]);
+		const toScreenX = x => (x - boundingBox.min[0]) * mult;
+		const toScreenY = y => (boundingBox.max[1] - y) * mult; // flip
+
+		canvas.width = WIDTH;
+		canvas.height = (boundingBox.max[1] - boundingBox.min[1]) * mult;
+
+		T.lineWidth = LINE_WEIGHT;
+		T.beginPath();
+		edges.forEach(edge => {
+			let a = nodes[edge[0]];
+			let b = nodes[edge[1]];
+			T.moveTo(toScreenX(a[0]), toScreenY(a[1]));
+			T.lineTo(toScreenX(b[0]), toScreenY(b[1]));
+		});
+		T.stroke();
+
+		T.fillStyle = DOT_COLOR;
+		T.beginPath();
+		nodes.forEach(node => {
+			T.rect(toScreenX(node[0]) - DOT_RADIUS, toScreenY(node[1]) - DOT_RADIUS, DOT_RADIUS * 2, DOT_RADIUS * 2);
+		});
+		T.fill();
+	};
+
+	$.getJSON('coords.json').then(draw).catch(err => console.error(err));
+</script>

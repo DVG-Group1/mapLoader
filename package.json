@@ -1,0 +1,15 @@
+{
+  "name": "neo4j-map-loader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "request-promise-json": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "andrew.maxwell@daugherty.com",
+  "license": "ISC"
+}
