@@ -1,5 +1,4 @@
-const neo4jUsername = 'neo4j';
-const neo4jPassword = '4dm1n';
+const neo4jLogin = 'neo4j:4dm1n';
 const jsonLocation = './saint-louis_missouri_roads.geojson';
 
 const {processData} = require('./nodeScripts/dataProcessor');
@@ -19,16 +18,7 @@ const boundingBox = { // 70/270 Interchange
 // 	max: [-90.177094, 38.813553]
 // };
 
-const savedJSONLocation = 'public/coords.json';
-const saveDataAsJSON = processedData => {
-	const json = JSON.stringify(processedData);
-	return save(savedJSONLocation, json).then(() => console.log(`Saved ${json.length / 1e6}m`));
-};
-
 readJSON(jsonLocation).then(data => {
 	const {nodes, edges} = processData({excludeTypes, boundingBox, data});
-
-	return saveGraph({nodes, edges, neo4jUsername, neo4jPassword});
-	// if you'd like to save the nodes and edges as json, uncomment this line and comment out the one above
-	// return saveDataAsJSON({nodes, edges});
+	return saveGraph({nodes, edges, neo4jLogin});
 }).catch(err => console.error(err));

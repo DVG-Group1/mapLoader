@@ -2,16 +2,16 @@ const utils = require('./utils');
 
 const processData = ({excludeTypes, boundingBox, data}) => {
 
-	// roads is an array of arrays of coordinates
 	const roads = data.features.filter(f =>
-		!excludeTypes.includes(f.properties.type) &&
-		f.geometry.coordinates.some(c =>
-			c[0] > boundingBox.min[0] && // 70/270 Interchange
+		!excludeTypes.includes(f.properties.type)
+	).map(f =>
+		f.geometry.coordinates.filter(c =>
+			c[0] > boundingBox.min[0] &&
 			c[0] < boundingBox.max[0] &&
 			c[1] < boundingBox.max[1] &&
 			c[1] > boundingBox.min[1]
 		)
-	).map(f => f.geometry.coordinates);
+	);
 
 	const allNodes = utils.flatten(roads);
 	const nodes = utils.arrayUnique(allNodes, node => node.toString());

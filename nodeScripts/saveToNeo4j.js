@@ -5,7 +5,7 @@ const square = x => x * x;
 const nodeDistance = (a, b) => Math.sqrt(square(a[0] - b[0]) + square(a[1] - b[1]));
 const btoa = str => new Buffer(str).toString('base64');
 
-const saveGraph = ({nodes, edges, neo4jUsername, neo4jPassword}) => {
+const saveGraph = ({nodes, edges, neo4jLogin}) => {
 
 	var deleteAllRequest = {
 		method: 'POST',
@@ -13,6 +13,7 @@ const saveGraph = ({nodes, edges, neo4jUsername, neo4jPassword}) => {
 		body: {query: 'MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r'}
 	};
 
+	// "nodes" is an array of coordinates, a coordinate is an array with two values, x and y
 	var nodeCreationRequests = nodes.map((node, index) => ({
 		method: 'POST',
 		to: '/node',
@@ -20,6 +21,7 @@ const saveGraph = ({nodes, edges, neo4jUsername, neo4jPassword}) => {
 		body: {x: node[0], y: node[1]}
 	}));
 
+	// "edges" is an array of node index pairs, a node index pair is an array with two numbers, each being the index of a coord in "nodes"
 	var relationshipCreationRequests = edges.map(edge => ({
 		method: 'POST',
 		to: '{' + edge[0] + '}/relationships',
@@ -48,7 +50,7 @@ const saveGraph = ({nodes, edges, neo4jUsername, neo4jPassword}) => {
 		url: 'http://localhost:7474/db/data/batch',
 		body: allRequests,
 		headers: {
-			Authorization: 'Basic ' + btoa(neo4jUsername + ':' + neo4jPassword)
+			Authorization: 'Basic ' + btoa(neo4jLogin)
 		},
 	}).then(res => {
 		inspect(res);
