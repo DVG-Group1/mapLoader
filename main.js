@@ -3,7 +3,7 @@ const jsonLocation = './saint-louis_missouri_roads.geojson';
 
 const excludeTypes = ['footway', 'pedestrian', 'path', 'cycleway', 'light_rail', 'rail', 'disused', 'steps', 'pier', 'unclassified', 'service', 'living_street'];
 
-const boundingBoxName = 'Inner City'; // see possible names below
+const boundingBoxName = 'St. Louis'; // see possible names below
 const boundingBoxPresets = {
 	'70/270 Interchange': {
 		min: [-90.449728, 38.738143],
